@@ -1,0 +1,514 @@
+openapi: 3.0.3
+info:
+  title: Swagger - OpenAPI 3.0
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://localhost:3000
+tags:
+  - name: user
+    description: Operations about user
+  - name: team
+    description: Operations about team
+  - name: tags
+    description: tags list
+paths:
+  /user/{userId}/getUser:
+    get:
+      tags:
+        - user
+      summary: Get user by user id
+      description: ''
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid username supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: Invalid username supplied
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: User not found
+  /user/getTeamByTags:
+    post:
+      tags:
+        - user
+      summary: getTeamByTags
+      description: ''
+      operationId: getTeamByTags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamShort'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: not found
+  /user/{teamId}/sendInvite:
+    post:
+      tags:
+        - user
+      summary: отправляем заявку в команду
+      description: ''
+      operationId: createInviteMessege
+      parameters:
+        - name: teamId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Created SearchMessege object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invite'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: create
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: error
+  /team/{teamId}/getTeam:
+    get:
+      tags:
+        - team
+      summary: Get team by team id
+      description: ''
+      operationId: getTeamById
+      parameters:
+        - name: teamId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+        '400':
+          description: Invalid username supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: Invalid team supplied
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: Team not found
+  /team/{teamId}/search:
+    get:
+      tags:
+        - team
+      summary: Получаем описание команды и кто нужен
+      description: ''
+      operationId: getSearchMessegeById
+      parameters:
+        - name: teamId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchMessege'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: not found
+    post:
+      tags:
+        - team
+      summary: Создаём описание команды и кто нужен
+      description: ''
+      operationId: createSearchMessegeById
+      parameters:
+        - name: teamId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Created SearchMessege object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchMessege'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: create
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: error
+  /team/{teamId}/getInvite:
+    get:
+      tags:
+        - team
+      summary: получаем все заявки в команду
+      description: ''
+      operationId: getInvite
+      parameters:
+        - name: teamId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/Invite'
+                    - type: object
+                      properties:
+                        name:
+                          type: string
+                          example: John Uik
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: not found
+  /team/{teamId}/acceptInvite:
+    patch:
+      tags:
+        - team
+      summary: принять заявку
+      description: ''
+      operationId: acceptinvite
+      parameters:
+        - name: teamId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: user Id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example: accept
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: not found
+  /team/{teamId}/rejectInvite:
+    patch:
+      tags:
+        - team
+      summary: отклонить заявку
+      description: ''
+      operationId: rejectInvite
+      parameters:
+        - name: teamId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: user Id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example: rejectInvite
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: not found
+  /tags/getTagList:
+    get:
+      tags:
+        - tags
+      summary: Получаем все теги
+      description: ''
+      operationId: getTagsList
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: not found
+components:
+  schemas:
+    TeamShort:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Dream
+    Team:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Dream
+        commandDescription:
+          type: string
+        task:
+          type: string
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserShort'
+      xml:
+        name: team
+    SearchMessege:
+      type: object
+      properties:
+        messege:
+          type: string
+        skillsTag:
+          type: array
+          items:
+            type: string
+    Invite:
+      type: object
+      properties:
+        userId:
+          type: string
+        teamId:
+          type: string
+        messege:
+          type: string
+        status:
+          type: string
+          enum:
+            - create
+            - accept
+            - reject
+    UserShort:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Jame
+        inviteTime:
+          type: integer
+          format: int32
+          example: 1716528815603
+      xml:
+        name: usershort
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: John Uik
+        email:
+          type: string
+          example: john@email.com
+        phone:
+          type: string
+          example: '12345'
+        city:
+          type: string
+          example: Moscow
+        level:
+          type: string
+          enum:
+            - Junior
+            - Midle
+            - Senior
+        education:
+          type: string
+        experience:
+          type: string
+        aboutMe:
+          type: string
+        jobSearch:
+          type: boolean
+          default: false
+        hackathonSearch:
+          type: boolean
+          default: false
+        avatar:
+          type: string
+          description: avatar url
+        skillsTag:
+          type: array
+          items:
+            type: string
+      xml:
+        name: user
+    Tag:
+      type: string
