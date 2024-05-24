@@ -1,12 +1,12 @@
 openapi: 3.0.3
 info:
-  title: Swagger - OpenAPI 3.0
+  title: Swagger Petstore - OpenAPI 3.0
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 1.0.0
+  version: 1.0.11
 servers:
-  - url: https://localhost:3000
+  - url: https://petstore3.swagger.io/api/v3
 tags:
   - name: user
     description: Operations about user
@@ -35,7 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/User'          
         '400':
           description: Invalid username supplied
           content:
@@ -56,10 +56,10 @@ paths:
                   messege:
                     type: string
                     example: User not found
-  /user/getTeamByTags:
+  /tags/getTeamByTags:
     post:
       tags:
-        - user
+        - tags
       summary: getTeamByTags
       description: ''
       operationId: getTeamByTags
@@ -69,7 +69,7 @@ paths:
             schema:
               type: array
               items:
-                type: string
+                type: string 
       responses:
         '200':
           description: successful operation
@@ -78,7 +78,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TeamShort'
+                  $ref: '#/components/schemas/TeamShort'          
         '404':
           description: User not found
           content:
@@ -88,7 +88,40 @@ paths:
                 properties:
                   messege:
                     type: string
-                    example: not found
+                    example: not found 
+  /user/{userId}/allInvite:
+    get:
+      tags:
+        - user
+      summary: все заявки пользователя
+      description: ''
+      operationId: allInvite
+      parameters:
+        - name: userId
+          in: path
+          description: 'The name that needs to be fetched. Use user1 for testing. '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invite'          
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messege:
+                    type: string
+                    example: not found                  
   /user/{teamId}/sendInvite:
     post:
       tags:
@@ -119,7 +152,7 @@ paths:
                 properties:
                   messege:
                     type: string
-                    example: create
+                    example: create          
         '404':
           description: User not found
           content:
@@ -129,7 +162,7 @@ paths:
                 properties:
                   messege:
                     type: string
-                    example: error
+                    example: error      
   /team/{teamId}/getTeam:
     get:
       tags:
@@ -150,7 +183,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Team'
+                $ref: '#/components/schemas/Team'          
         '400':
           description: Invalid username supplied
           content:
@@ -191,7 +224,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SearchMessege'
+                $ref: '#/components/schemas/SearchMessege'         
         '404':
           description: User not found
           content:
@@ -201,7 +234,7 @@ paths:
                 properties:
                   messege:
                     type: string
-                    example: not found
+                    example: not found  
     post:
       tags:
         - team
@@ -220,7 +253,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SearchMessege'
+                $ref: '#/components/schemas/SearchMessege'
       responses:
         '200':
           description: successful operation
@@ -231,7 +264,7 @@ paths:
                 properties:
                   messege:
                     type: string
-                    example: create
+                    example: create          
         '404':
           description: User not found
           content:
@@ -241,11 +274,11 @@ paths:
                 properties:
                   messege:
                     type: string
-                    example: error
+                    example: error                
   /team/{teamId}/getInvite:
     get:
       tags:
-        - team
+      - team
       summary: получаем все заявки в команду
       description: ''
       operationId: getInvite
@@ -265,12 +298,12 @@ paths:
                 type: array
                 items:
                   allOf:
-                    - $ref: '#/components/schemas/Invite'
-                    - type: object
-                      properties:
-                        name:
-                          type: string
-                          example: John Uik
+                  - $ref: '#/components/schemas/Invite'
+                  - type: object
+                    properties:
+                      name:
+                        type: string
+                        example: John Uik
         '404':
           description: User not found
           content:
@@ -303,7 +336,7 @@ paths:
               type: object
               properties:
                 userId:
-                  type: string
+                  type: string    
       responses:
         '200':
           description: successful operation
@@ -311,7 +344,7 @@ paths:
             application/json:
               schema:
                 type: string
-                example: accept
+                example: accept           
         '404':
           description: User not found
           content:
@@ -321,8 +354,8 @@ paths:
                 properties:
                   messege:
                     type: string
-                    example: not found
-  /team/{teamId}/rejectInvite:
+                    example: not found 
+  /team/{teamId}/rejectInvite:                  
     patch:
       tags:
         - team
@@ -344,7 +377,7 @@ paths:
               type: object
               properties:
                 userId:
-                  type: string
+                  type: string    
       responses:
         '200':
           description: successful operation
@@ -352,7 +385,7 @@ paths:
             application/json:
               schema:
                 type: string
-                example: rejectInvite
+                example: rejectInvite           
         '404':
           description: User not found
           content:
@@ -362,7 +395,7 @@ paths:
                 properties:
                   messege:
                     type: string
-                    example: not found
+                    example: not found                   
   /tags/getTagList:
     get:
       tags:
@@ -378,7 +411,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Tag'
+                  $ref: '#/components/schemas/Tag'          
         '404':
           description: User not found
           content:
@@ -426,7 +459,7 @@ components:
       properties:
         messege:
           type: string
-        skillsTag:
+        skillsTag: 
           type: array
           items:
             type: string
@@ -445,7 +478,7 @@ components:
             - create
             - accept
             - reject
-    UserShort:
+    UserShort: 
       type: object
       properties:
         id:
@@ -473,7 +506,7 @@ components:
           example: 10
         name:
           type: string
-          example: John Uik
+          example: John Uik 
         email:
           type: string
           example: john@email.com
@@ -496,15 +529,15 @@ components:
         aboutMe:
           type: string
         jobSearch:
-          type: boolean
-          default: false
+         type: boolean
+         default: false
         hackathonSearch:
           type: boolean
           default: false
         avatar:
           type: string
           description: avatar url
-        skillsTag:
+        skillsTag: 
           type: array
           items:
             type: string
@@ -512,3 +545,6 @@ components:
         name: user
     Tag:
       type: string
+
+
+
